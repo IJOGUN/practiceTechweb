@@ -1,0 +1,42 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- script: |
+    echo Add other tasks to build, test, and deploy your project.
+    echo See https://aka.ms/yaml
+  displayName: 'Run a multi-line script'
+
+- task: TerraformInstaller@0
+  inputs:
+    terraformVersion: 'latest'
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'init'
+    backendServiceArm: 'AzureTraining (606e824b-aaf7-4b4e-9057-b459f6a4436d)'
+    backendAzureRmResourceGroupName: 'oluwaseyi_capstone'
+    backendAzureRmStorageAccountName: 'oluwaseyisac'
+    backendAzureRmContainerName: 'oluwaseyicont'
+    backendAzureRmKey: 'terraform.tfstate'
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'validate'
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'plan'
+    additionalArgs: '-out=tfplan'
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'apply'
+    additionalArgs: 'tfplan'
+    environmentServiceNameAzureRM: 'AzureTraining (606e824b-aaf7-4b4e-9057-b459f6a4436d)'

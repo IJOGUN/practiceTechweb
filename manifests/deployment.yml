@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: techwebappgit 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: techwebappgit
+  template:
+    metadata:
+      labels:
+        app: techwebappgit 
+    spec:
+      containers:
+        - name: techwebappgit 
+          image: oluwaseyiacr.azurecr.io/techwebappgit
+          ports:
+          - containerPort: 80
